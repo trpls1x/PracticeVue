@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day1p2</title>
+    <style>
+        td {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <input type="text" v-model="surname">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Group</th>
+                <th>Mark</th>
+                <th>PW</th>
+                <th></th>
+            </tr>
+            <tr v-for="(stud, index) in students">
+                <td v-bind:style="stud.name.includes(surname) ? 'color:red' : 'color:black'">{{stud.name}}</td>
+                <td>{{stud.group}}</td>
+                <td>{{stud.mark}}</td>
+                <td><input type="checkbox" v-model="stud.isDonePr"></td>
+                <td><button v-on:click="deleteStudent(index)">Видалити</button></td>
+           </tr>
+        </table>
+
+        <input type="text" v-model="name" placeholder="ПІБ">
+        <select v-model="group">
+            <option value="RPZ1">RPZ1</option>
+            <option value="RPZ2">RPZ2</option>
+        </select>
+        <input type="text" v-model="birth" placeholder="День народження">
+        <input type="checkbox" v-model="check">Здав ПР
+        <button @click="addStudent">ОК</button>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
