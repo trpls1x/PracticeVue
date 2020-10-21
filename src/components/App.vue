@@ -39,6 +39,32 @@
             <input type="checkbox" v-model="updatedStudent.isDonePr">Здав ПР
             <button @click="updateStudent">ОК</button>
         </div>
+
+        <hr>
+        <div class="converter">
+            <h2>Currency converter</h2>
+
+            <span>Enter amount:</span>
+            <input type="text" v-model="amount"><br><br>
+            
+            <span>Convert from:</span>
+            <select v-model="currencyToSell">
+                <option value="UAH">Hryvna</option>
+                <option value="EUR">Euro</option>
+                <option value="USD">US Dollar</option>
+                <option value="RUR">Ruble</option>
+            </select>
+
+            <span>Convert to:</span>
+            <select v-model="currencyToBuy">
+                <option value="UAH">Hryvna</option>
+                <option value="EUR">Euro</option>
+                <option value="USD">US Dollar</option>
+                <option value="RUR">Ruble</option>
+            </select>
+            <button @click="convertCurrency">Convert</button>
+            <p>{{amount}} {{currencyToSell}} equals {{convertedAmount}} {{currencyToBuy}}</p>
+        </div>
     </div>
 </template>
 
@@ -53,7 +79,14 @@ export default {
             students: [],
             student: { name: '', group: '',  mark: '', isDonePr: false},
             updatedStudent: { name: '', group: '',  mark: '', isDonePr: false, id: ''},
-            surname: '-'
+            surname: '-',
+            //converter
+            exchangeRates: [],
+            exchangeRate: {ccy:'', base_ccy:'', buy:'',sell:''},
+            amount: 0,
+            currencyToSell: '',
+            currencyToBuy: '',
+            convertedAmount: 0
         }
     },
     mounted: function(){
@@ -89,6 +122,36 @@ export default {
             form.style.visibility = "hidden"
 
             axios.put("http://46.101.212.195:3000/students/" + this.updatedStudent.id, this.updatedStudent)
+        },
+        convertCurrency: function() {
+            var action = '';
+            if(this.currencyToBuy == 'UAH') {
+                this.exchangeRate.base_ccy = this.currencyToBuy;
+                this.exchangeRate.ccy = this.currencyToSell;
+                action = 'buy'
+            } else if (this.currencyToSell == 'UAH') {
+                this.exchangeRate.base_ccy = this.currencyToSell;
+                this.exchangeRate.ccy = this.currencyToBuy;
+                action = 'sell'
+            } else
+                alert('Choose UAH')
+
+            axios.get("https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11").then((response) =>{
+                // console.log(response.data);
+                this.exchangeRates = response.data;
+            })
+
+            
+            let rightExchangeRate = this.exchangeRates.find((element) => {
+                return element.ccy == 'EUR';
+            })
+            
+            console.log(ExchangeRate)
+
+            // if(action == 'buy')
+            //     this.convertedAmount = this.amount * rightExchangeRate.buy
+            // else if (action == 'sell')
+            //      this.convertedAmount = this.amount * rightExchangeRate.sell
         }
     }
 }
