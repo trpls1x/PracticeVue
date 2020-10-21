@@ -139,19 +139,21 @@ export default {
             axios.get("https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11").then((response) =>{
                 // console.log(response.data);
                 this.exchangeRates = response.data;
+                let rightExchangeRate = this.exchangeRates.find((element) => {
+                    return element.ccy == this.exchangeRate.ccy;
+                })
+            
+                console.log(rightExchangeRate)
+                if(action == 'buy')
+                    this.convertedAmount = this.amount * rightExchangeRate.buy
+                else if (action == 'sell')
+                    this.convertedAmount = this.amount / rightExchangeRate.sale
             })
 
             
-            let rightExchangeRate = this.exchangeRates.find((element) => {
-                return element.ccy == 'EUR';
-            })
             
-            console.log(ExchangeRate)
 
-            // if(action == 'buy')
-            //     this.convertedAmount = this.amount * rightExchangeRate.buy
-            // else if (action == 'sell')
-            //      this.convertedAmount = this.amount * rightExchangeRate.sell
+             
         }
     }
 }
