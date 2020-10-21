@@ -82,7 +82,6 @@ export default {
             surname: '-',
             //converter
             exchangeRates: [],
-            exchangeRate: {ccy:'', base_ccy:'', buy:'',sell:''},
             amount: 0,
             currencyToSell: '',
             currencyToBuy: '',
@@ -124,23 +123,21 @@ export default {
             axios.put("http://46.101.212.195:3000/students/" + this.updatedStudent.id, this.updatedStudent)
         },
         convertCurrency: function() {
-            var action = '';
+            var action, ccy;
             if(this.currencyToBuy == 'UAH') {
-                this.exchangeRate.base_ccy = this.currencyToBuy;
-                this.exchangeRate.ccy = this.currencyToSell;
+                ccy = this.currencyToSell;
                 action = 'buy'
             } else if (this.currencyToSell == 'UAH') {
-                this.exchangeRate.base_ccy = this.currencyToSell;
-                this.exchangeRate.ccy = this.currencyToBuy;
+                ccy = this.currencyToBuy;
                 action = 'sell'
             } else
                 alert('Choose UAH')
 
             axios.get("https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11").then((response) =>{
-                // console.log(response.data);
+                console.log(response.data);
                 this.exchangeRates = response.data;
                 let rightExchangeRate = this.exchangeRates.find((element) => {
-                    return element.ccy == this.exchangeRate.ccy;
+                    return element.ccy == ccy;
                 })
             
                 console.log(rightExchangeRate)
@@ -149,11 +146,6 @@ export default {
                 else if (action == 'sell')
                     this.convertedAmount = this.amount / rightExchangeRate.sale
             })
-
-            
-            
-
-             
         }
     }
 }
