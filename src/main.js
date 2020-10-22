@@ -20,7 +20,8 @@ const router = new VueRouter({
    routes
 })
 
-Vue.use(VueRouter, VueAxios, axios)
+Vue.use(VueRouter)
+Vue.use(VueAxios, axios)
 
 new Vue({
    render: h => h(App),

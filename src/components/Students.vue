@@ -44,6 +44,8 @@
 
         <router-link :to="'/converter/'"><button>Converter</button></router-link>
         
+        <router-link :to="'/nova-poshta/'"><button>Нова Пошта</button></router-link>
+        
     </div>
 </template>
 
