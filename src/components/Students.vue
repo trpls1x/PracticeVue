@@ -23,7 +23,7 @@
                 <td>{{stud.group}}</td>
                 <td>{{stud.mark}}</td>
                 <td><input type="checkbox" v-model="stud.isDonePr"></td>
-                <td><button @click="deleteStudent(stud._id)">Видалити</button></td>
+                <td><button @click.prevent="deleteStudent(stud._id)" v-show="stud.group==getCurrentUser.group">Видалити</button></td>
                 <td><button @click="showUpdateForm(stud._id)">update</button></td>
            </tr>
         </table>
@@ -74,9 +74,12 @@ export default {
         studentsCount () {
             return this.$store.getters.getCount
         },
-        change (){
+        change () {
             return this.$store.getters.getChange
-        }
+        },
+        getCurrentUser() {
+            return this.$store.getters.getUser
+        } 
     },
     mounted: async function() {
             let response = await Vue.axios.get("http://46.101.212.195:3000/students");
