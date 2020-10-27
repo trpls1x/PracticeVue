@@ -9,6 +9,8 @@ import StudentInfo from './components/StudentInfo.vue'
 import Converter from './components/Converter.vue'
 import NovaPoshta from './components/NovaPoshta.vue'
 
+import store from './store.js'
+
 const routes = [
    { path: '/', component: Students },
    { path: '/student-info/:id', component: StudentInfo, props: true},
@@ -26,5 +28,6 @@ Vue.use(VueAxios, axios)
 new Vue({
    render: h => h(App),
    el: '#app',
-   router
+   router,
+   store
 })

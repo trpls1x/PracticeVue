@@ -1,5 +1,13 @@
 <template>
     <div>
+        <template v-if="!change">
+            <link rel="stylesheet" href="./css/dark.css">
+            <button @click="changeTheme">Change to light</button>
+        </template>
+        <template v-else>
+            <link rel="stylesheet" href="./css/light.css">
+            <button @click="changeTheme">Change to dark</button>
+        </template>
         <input type="text" v-model="surname">
         <table>
             <tr>
@@ -24,6 +32,7 @@
         <select v-model="student.group">
             <option value="RPZ1">RPZ1</option>
             <option value="RPZ2">RPZ2</option>
+            <option value="повернувся">Повернувся</option>
         </select>
         <input type="text" v-model="student.mark" placeholder="Mark">
         <input type="checkbox" v-model="student.isDonePr">Здав ПР
@@ -39,7 +48,7 @@
             <input type="checkbox" v-model="updatedStudent.isDonePr">Здав ПР
             <button @click="updateStudent">ОК</button>
         </div>
-
+        <p>Students count:{{studentsCount}}</p>
         <hr>
 
         <router-link :to="'/converter/'"><button>Converter</button></router-link>
@@ -61,11 +70,19 @@ export default {
             surname: '-',
         }
     },
-    mounted: function(){
-        Vue.axios.get("http://46.101.212.195:3000/students").then((response) =>{
-            console.log(response.data);
+    computed:{
+        studentsCount () {
+            return this.$store.getters.getCount
+        },
+        change (){
+            return this.$store.getters.getChange
+        }
+    },
+    mounted: async function() {
+            let response = await Vue.axios.get("http://46.101.212.195:3000/students");
+            console.log(response.data)
             this.students = response.data;
-        })
+            this.$store.commit('setCount', this.students.length);
     },
     methods: {
         deleteStudent: function(id) {
@@ -95,12 +112,15 @@ export default {
 
             Vue.axios.put("http://46.101.212.195:3000/students/" + this.updatedStudent.id, this.updatedStudent)
         },
-        
+        changeTheme: function(){
+            this.$store.commit('setStyle', !this.$store.getters.getChange);
+            localStorage.setItem('change', this.$store.getters.getChange)
+        }
     }
 }
 </script>
 
 <style scoped>
-    
+
 </style>
 
